@@ -1,0 +1,50 @@
+### Gradle ###
+.gradle/
+build/
+local.properties
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Kotlin ###
+*.class
+*.log
+.kotlin/
+
+### Mac OS ###
+.DS_Store
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### Native libraries ###
+*.so
+*.dylib
+*.dll
+
+### Logs ###
+logs/
+*.log
+
+### JVM crash logs ###
+hs_err_pid*
+replay_pid*
+
+### Temporary files ###
+*~
+.*.swp
+.*.swo
+
+### Generated files ###
+src/main/generated/
+
+### Compiled output ###
+target/
+**/.build
+**/build
+react-app/node_modules
