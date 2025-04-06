@@ -3,6 +3,7 @@ package server
 import domain.entity.BufferStats
 import domain.entity.SessionInfo
 import domain.service.BufferStatsBroadcast
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
@@ -47,7 +48,6 @@ class BufferWebSocketServer(private val port: Int) : BufferStatsBroadcast {
 
         // Static resources
         private const val STATIC_RESOURCES_PATH = "static"
-        private const val REACT_INDEX_HTML_PATH = "simulation-server/src/main/resources/static/index.html"
 
         // WebSocket paths
         private const val STATS_WEBSOCKET_PATH = "/stats"
@@ -87,7 +87,12 @@ class BufferWebSocketServer(private val port: Int) : BufferStatsBroadcast {
 
                 // Route for React app
                 get("/") {
-                    call.respondFile(File(REACT_INDEX_HTML_PATH))
+                    val resource = javaClass.classLoader.getResource("static/index.html")?.toURI()
+                    if (resource != null) {
+                        call.respondFile(File(resource))
+                    } else {
+                        call.respondText("index.html not found", status = HttpStatusCode.InternalServerError)
+                    }
                 }
             }
         }
