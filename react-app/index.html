@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buffer Memory Monitor</title>
+    <!-- Prevent flash of incorrect theme -->
+    <script src="/theme-script.js"></script>
+    <style>
+        /* Base styles to prevent flash of unstyled content */
+        :root {
+            color-scheme: light;
+        }
+        html.dark {
+            color-scheme: dark;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        html.dark body {
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

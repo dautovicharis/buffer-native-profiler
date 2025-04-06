@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Base styles */
+  html {
+    @apply transition-colors duration-300;
+  }
+
+  body {
+    @apply font-sans leading-relaxed bg-light text-light dark:bg-dark dark:text-dark transition-colors duration-300;
+  }
+
+  h1 {
+    @apply text-primary dark:text-primary-dark text-center transition-colors duration-300;
+  }
+
+  h2 {
+    @apply mb-4 text-primary dark:text-primary-dark;
+  }
+
+  h3 {
+    @apply mb-2 text-light dark:text-dark text-lg;
+  }
+}
+
+@layer components {
+  /* Animation keyframes */
+  @keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+  }
+
+  @keyframes pulse-text {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+  }
+
+  @keyframes subtleFadeIn {
+    from { opacity: 0.9; }
+    to { opacity: 1; }
+  }
+
+  @keyframes itemEmission {
+    0% { transform: scale(0.9); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes progressGlow {
+    0% { box-shadow: 0 0 3px currentColor, 0 0 5px currentColor; filter: brightness(0.9); transform: scaleY(1); }
+    50% { box-shadow: 0 0 8px currentColor, 0 0 10px currentColor; filter: brightness(1.2); transform: scaleY(1); }
+    100% { box-shadow: 0 0 3px currentColor, 0 0 5px currentColor; filter: brightness(0.9); transform: scaleY(1); }
+  }
+
+  @keyframes progressPulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.9; }
+    100% { opacity: 0.6; }
+  }
+
+  /* Common components */
+  .section {
+    @apply bg-card-light dark:bg-card-dark rounded-md p-6 mb-8 shadow-light dark:shadow-dark transition-colors duration-300;
+  }
+
+  /* Progress bar animations */
+  .progress-bar-animate {
+    animation: progressGlow 2.5s infinite;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    height: 0.5rem !important; /* Fixed height to match h-2 */
+    transform-origin: center;
+  }
+
+  .progress-bar-animate::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}
