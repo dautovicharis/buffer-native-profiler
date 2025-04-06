@@ -18,20 +18,20 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 WORKDIR /app
 
 # Copy gradle files first for better layer caching
-COPY ../kotln-app/gradle gradle/
-COPY ../kotln-app/gradlew build.gradle.kts settings.gradle.kts ./
+COPY ../simulation-server/gradle gradle/
+COPY ../simulation-server/gradlew build.gradle.kts settings.gradle.kts ./
 
 # Make gradlew executable
 RUN chmod +x ./gradlew
 
 # Copy all source code
-COPY ../kotln-app/src src/
+COPY ../simulation-server/src src/
 
 # Compile the native library for Linux with static linking of libstdc++
 RUN mkdir -p src/main/resources && \
     cd src/main/cpp && \
-    g++ -shared -fPIC -std=c++11 -O2 -static-libstdc++ -o libbuffermonitor.so -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" *.cpp && \
-    cp libbuffermonitor.so ../resources/
+    g++ -shared -fPIC -std=c++11 -O2 -static-libstdc++ -o buffer-profiler-1.0.0.so -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" *.cpp && \
+    cp buffer-profiler-1.0.0.so ../resources/
 
 # Build the application using the project's Gradle wrapper
 RUN ./gradlew buildFatJar --no-daemon
