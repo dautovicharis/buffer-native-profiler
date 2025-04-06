@@ -18,30 +18,38 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 WORKDIR /app
 
 # Copy gradle files first for better layer caching
-COPY ../kotln-app/gradle gradle/
-COPY ../kotln-app/gradlew build.gradle.kts settings.gradle.kts ./
+COPY gradle gradle/
+COPY gradlew build.gradle.kts settings.gradle.kts ./
 
 # Make gradlew executable
 RUN chmod +x ./gradlew
 
 # Copy all source code
-COPY ../kotln-app/src src/
+COPY buffer-profiler buffer-profiler/
+COPY buffer-profiler-bridge buffer-profiler-bridge/
+COPY simulation-server simulation-server/
 
-# Compile the native library for Linux with static linking of libstdc++
-RUN mkdir -p src/main/resources && \
-    cd src/main/cpp && \
-    g++ -shared -fPIC -std=c++11 -O2 -static-libstdc++ -o libbuffermonitor.so -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" *.cpp && \
-    cp libbuffermonitor.so ../resources/
+# Compile the native library
+RUN mkdir -p buffer-profiler/src/main/resources && \
+    cd buffer-profiler/src/main/cpp && \
+    g++ -shared -fPIC -std=c++11 -O2 -static-libstdc++ -o buffer-profiler-1.0.0.so -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" *.cpp && \
+    cp buffer-profiler-1.0.0.so ../resources/
+
+# Copy the native library to the bridge module
+RUN mkdir -p buffer-profiler-bridge/src/main/resources && \
+    cp buffer-profiler/src/main/resources/buffer-profiler-1.0.0.so buffer-profiler-bridge/src/main/resources/
 
 # Build the application using the project's Gradle wrapper
-RUN ./gradlew buildFatJar --no-daemon
+RUN ./gradlew :simulation-server:buildFatJar --no-daemon
 
 # Runtime stage - using a minimal JRE image
 FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 # Copy the built JAR file from the build stage
-COPY --from=build /app/build/libs/buffer-profiler-fat.jar app.jar
+COPY --from=build /app/simulation-server/build/libs/buffer-profiler-fat.jar app.jar
+# Copy the native library
+COPY --from=build /app/buffer-profiler/src/main/resources/buffer-profiler-1.0.0.so .
 
 # Expose the port (will be overridden by Render's PORT env var)
 EXPOSE 8080
