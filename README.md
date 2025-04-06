@@ -1,5 +1,8 @@
 # Buffer Native Profiler
 
+![ScreenRecording2025-04-06at21 23 14-ezgif com-optimize](https://github.com/user-attachments/assets/d370511b-76b6-4388-a530-f7eee22aafdb)
+
+
 Monitoring and visualizing buffer performance with native JNI integration for precise memory tracking.
 
 - Memory usage tracking
@@ -13,6 +16,18 @@ The project consists of several modules:
 - **buffer-profiler-bridge**: Kotlin interface to the native profiling library
 - **simulation-server**: Server that runs buffer simulations and provides real-time metrics
 - **react-app**: Web-based visualization dashboard
+
+## Project Structure
+
+```
+buffer-native-profiler/
+├── buffer-profiler/            # Native profiling library
+│   ├── src/main/cpp/           # C++ source files
+│   └── src/main/resources/     # Compiled native libraries
+├── buffer-profiler-bridge/     # Kotlin interface to native library
+├── simulation-server/          # Simulation server
+└── react-app/                  # React visualization dashboard
+```
 
 ## Getting Started
 
@@ -63,18 +78,6 @@ cd react-app
 ```
 
 The dashboard will be available at http://localhost:3000
-
-## Project Structure
-
-```
-buffer-native-profiler/
-├── buffer-profiler/            # Native profiling library
-│   ├── src/main/cpp/           # C++ source files
-│   └── src/main/resources/     # Compiled native libraries
-├── buffer-profiler-bridge/     # Kotlin interface to native library
-├── simulation-server/          # Simulation server
-└── react-app/                  # React visualization dashboard
-```
 
 ## Development Tasks
 
