@@ -6,24 +6,24 @@ import java.nio.file.Paths
  * Monitors native buffer operations and memory usage.
  * Provides a bridge between Kotlin and C++ native code for buffer profiling.
  */
-class NativeBufferMonitor {
+internal class NativeBufferMonitor {
     private companion object {
         private const val LIBRARY_NAME = "buffer-profiler-1.0.0"
 
         // Native initialization method
         @JvmStatic
-        external fun initialize(): Boolean
+        private external fun initialize(): Boolean
 
         // Buffer operation methods
         @JvmStatic
-        external fun createBuffer(capacity: Int): Long
+        private external fun createBuffer(capacity: Int): Long
 
         @JvmStatic
-        external fun updateBufferMetrics(bufferId: Long, size: Int, memoryUsage: Long)
+        private external fun updateBufferMetrics(bufferId: Long, size: Int, memoryUsage: Long)
 
         // Suspension tracking methods
         @JvmStatic
-        external fun recordSuspension(
+        private external fun recordSuspension(
             threadId: Long,
             threadName: String,
             bufferId: Long,
@@ -33,45 +33,45 @@ class NativeBufferMonitor {
 
         // Statistics and reporting methods
         @JvmStatic
-        external fun getSuspensionCount(): Int
+        private external fun getSuspensionCount(): Int
 
         @JvmStatic
-        external fun recordEmission(bufferId: Long)
+        private external fun recordEmission(bufferId: Long)
 
         @JvmStatic
-        external fun recordConsumption(bufferId: Long)
+        private external fun recordConsumption(bufferId: Long)
 
         @JvmStatic
-        external fun getTotalEmissions(): Int
+        private external fun getTotalEmissions(): Int
 
         @JvmStatic
-        external fun getTotalConsumptions(): Int
+        private external fun getTotalConsumptions(): Int
 
         @JvmStatic
-        external fun getBufferEmissions(bufferId: Long): Int
+        private external fun getBufferEmissions(bufferId: Long): Int
 
         @JvmStatic
-        external fun getBufferConsumptions(bufferId: Long): Int
+        private external fun getBufferConsumptions(bufferId: Long): Int
 
         @JvmStatic
-        external fun getBufferSuspensionCount(bufferId: Long): Int
+        private external fun getBufferSuspensionCount(bufferId: Long): Int
 
         // Memory monitoring methods
         @JvmStatic
-        external fun getObjectSize(obj: Any): Long
+        private external fun getObjectSize(obj: Any): Long
 
         @JvmStatic
-        external fun getBufferSize(bufferId: Long): Int
+        private external fun getBufferSize(bufferId: Long): Int
 
         @JvmStatic
-        external fun getBufferMemoryUsage(bufferId: Long): Long
+        private external fun getBufferMemoryUsage(bufferId: Long): Long
 
         @JvmStatic
-        external fun getTotalTrackedMemory(): Long
+        private external fun getTotalTrackedMemory(): Long
 
         // Reset methods
         @JvmStatic
-        external fun clearTracking()
+        private external fun clearTracking()
     }
 
     private var libraryLoaded = false
@@ -242,14 +242,14 @@ class NativeBufferMonitor {
      * Creates a buffer with the specified capacity.
      * @return Buffer ID or timestamp if native library is not available
      */
-    fun safeCreateBuffer(capacity: Int): Long {
+    internal fun safeCreateBuffer(capacity: Int): Long {
         return withNativeLibrary(System.nanoTime()) { createBuffer(capacity) }
     }
 
     /**
      * Updates metrics for the specified buffer.
      */
-    fun safeUpdateBufferMetrics(bufferId: Long, size: Int, memoryUsage: Long) {
+    internal fun safeUpdateBufferMetrics(bufferId: Long, size: Int, memoryUsage: Long) {
         withNativeLibrary(Unit) {
             updateBufferMetrics(
                 bufferId = bufferId,
@@ -263,7 +263,7 @@ class NativeBufferMonitor {
      * Records a suspension event for the specified buffer.
      * Uses current thread information by default.
      */
-    fun safeRecordSuspension(
+    internal fun safeRecordSuspension(
         threadId: Long = Thread.currentThread().id,
         threadName: String = Thread.currentThread().name,
         bufferId: Long,
@@ -283,63 +283,63 @@ class NativeBufferMonitor {
     /**
      * Gets the total number of suspension events recorded.
      */
-    fun safeGetSuspensionCount(): Int {
+    internal fun safeGetSuspensionCount(): Int {
         return withNativeLibrary(0) { getSuspensionCount() }
     }
 
     /**
      * Records an emission event for the specified buffer.
      */
-    fun safeRecordEmission(bufferId: Long) {
+    internal fun safeRecordEmission(bufferId: Long) {
         withNativeLibrary(Unit) { recordEmission(bufferId) }
     }
 
     /**
      * Records a consumption event for the specified buffer.
      */
-    fun safeRecordConsumption(bufferId: Long) {
+    internal fun safeRecordConsumption(bufferId: Long) {
         withNativeLibrary(Unit) { recordConsumption(bufferId) }
     }
 
     /**
      * Gets the total number of emissions recorded.
      */
-    fun safeGetTotalEmissions(): Int {
+    internal fun safeGetTotalEmissions(): Int {
         return withNativeLibrary(0) { getTotalEmissions() }
     }
 
     /**
      * Gets the total number of consumptions recorded.
      */
-    fun safeGetTotalConsumptions(): Int {
+    internal fun safeGetTotalConsumptions(): Int {
         return withNativeLibrary(0) { getTotalConsumptions() }
     }
 
     /**
      * Gets the number of emissions for a specific buffer.
      */
-    fun safeGetBufferEmissions(bufferId: Long): Int {
+    internal fun safeGetBufferEmissions(bufferId: Long): Int {
         return withNativeLibrary(0) { getBufferEmissions(bufferId) }
     }
 
     /**
      * Gets the number of consumptions for a specific buffer.
      */
-    fun safeGetBufferConsumptions(bufferId: Long): Int {
+    internal fun safeGetBufferConsumptions(bufferId: Long): Int {
         return withNativeLibrary(0) { getBufferConsumptions(bufferId) }
     }
 
     /**
      * Gets the number of suspensions for a specific buffer.
      */
-    fun safeGetBufferSuspensionCount(bufferId: Long): Int {
+    internal fun safeGetBufferSuspensionCount(bufferId: Long): Int {
         return withNativeLibrary(0) { getBufferSuspensionCount(bufferId) }
     }
 
     /**
      * Clears all tracking data in the native library.
      */
-    fun safeClearTracking() {
+    internal fun safeClearTracking() {
         withNativeLibrary(Unit) { clearTracking() }
     }
 
@@ -348,7 +348,7 @@ class NativeBufferMonitor {
      * Returns 0 if the object is null, memory monitoring is disabled,
      * or if the native library is not available.
      */
-    fun safeGetObjectSize(obj: Any?): Long {
+    internal fun safeGetObjectSize(obj: Any?): Long {
         if (obj == null) return 0
         if (!memoryMonitoringEnabled) return 0
 
@@ -366,21 +366,21 @@ class NativeBufferMonitor {
     /**
      * Gets the total memory being tracked by the native library.
      */
-    fun safeGetTotalTrackedMemory(): Long {
+    internal fun safeGetTotalTrackedMemory(): Long {
         return withNativeLibrary(0L) { getTotalTrackedMemory() }
     }
 
     /**
      * Gets the size of a specific buffer.
      */
-    fun safeGetBufferSize(bufferId: Long): Int {
+    internal fun safeGetBufferSize(bufferId: Long): Int {
         return withNativeLibrary(0) { getBufferSize(bufferId) }
     }
 
     /**
      * Gets the memory usage of a specific buffer.
      */
-    fun safeGetBufferMemoryUsage(bufferId: Long): Long {
+    internal fun safeGetBufferMemoryUsage(bufferId: Long): Long {
         return withNativeLibrary(0L) { getBufferMemoryUsage(bufferId) }
     }
 }
