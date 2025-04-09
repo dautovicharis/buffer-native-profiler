@@ -98,10 +98,10 @@ class NativeBufferMonitorTest {
             bufferCapacity = 10
         )
 
-        val suspensions = monitor.safeGetSuspensionCount()
+        val suspensions = monitor.safeGetTotalSuspensions()
 
         // Assert
-        assertDoesNotThrow { monitor.safeGetSuspensionCount() }
+        assertDoesNotThrow { monitor.safeGetTotalSuspensions() }
         assertDoesNotThrow { monitor.safeGetBufferSuspensionCount(bufferId) }
 
         if (suspensions > 0) {

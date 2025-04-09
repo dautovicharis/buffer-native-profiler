@@ -104,7 +104,7 @@ class MonitorBuffersUseCaseImpl(
                 bufferCapacity = bufferCapacity,
                 totalEmissions = bufferMonitorRepository.getTotalEmissions(),
                 totalConsumptions = bufferMonitorRepository.getTotalConsumptions(),
-                suspensions = bufferMonitorRepository.getSuspensionCount(),
+                suspensions = bufferMonitorRepository.getTotalSuspensions(),
                 waitingItems = bufferMonitorRepository.getTotalEmissions() - bufferMonitorRepository.getTotalConsumptions(),
                 memoryUsage = totalMemory,
                 memoryPerItem = memoryPerItem,
@@ -183,7 +183,7 @@ class MonitorBuffersUseCaseImpl(
             Int Buffer: ${intBuffer.getCurrentSize()}/${intBuffer.capacity}
             Memory: ${numberFormat.format(totalMemory)} bytes (${totalMemory / 1024} KB)
             Memory Per Item: ${numberFormat.format(memoryPerItem)} bytes
-            Emitted: ${bufferMonitorRepository.getTotalEmissions()}, Consumed: ${bufferMonitorRepository.getTotalConsumptions()}, Suspensions: ${bufferMonitorRepository.getSuspensionCount()}
+            Emitted: ${bufferMonitorRepository.getTotalEmissions()}, Consumed: ${bufferMonitorRepository.getTotalConsumptions()}, Suspensions: ${bufferMonitorRepository.getTotalSuspensions()}
         """.trimIndent())
     }
 }

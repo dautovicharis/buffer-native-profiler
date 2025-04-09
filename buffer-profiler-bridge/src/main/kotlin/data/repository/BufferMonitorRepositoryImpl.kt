@@ -35,8 +35,8 @@ internal class BufferMonitorRepositoryImpl(
         return nativeBufferMonitor.safeGetTotalTrackedMemory()
     }
 
-    override fun getSuspensionCount(): Int {
-        return nativeBufferMonitor.safeGetSuspensionCount()
+    override fun getTotalSuspensions(): Int {
+        return nativeBufferMonitor.safeGetTotalSuspensions()
     }
 
     override fun recordEmission(bufferId: Long) {

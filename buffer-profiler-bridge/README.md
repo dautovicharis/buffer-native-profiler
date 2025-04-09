@@ -11,5 +11,7 @@ A Kotlin interface that provides a bridge between JVM applications and the nativ
 
 ## Tests
 ```bash
+./gradlew :test
+# Note: If you are running this from the project root, use:
 ./gradlew :buffer-profiler-bridge:test
 ```
