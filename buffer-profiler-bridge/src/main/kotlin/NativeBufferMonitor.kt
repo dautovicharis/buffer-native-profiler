@@ -33,7 +33,7 @@ internal class NativeBufferMonitor {
 
         // Statistics and reporting methods
         @JvmStatic
-        private external fun getSuspensionCount(): Int
+        private external fun getTotalSuspensions(): Int
 
         @JvmStatic
         private external fun recordEmission(bufferId: Long)
@@ -281,10 +281,10 @@ internal class NativeBufferMonitor {
     }
 
     /**
-     * Gets the total number of suspension events recorded.
+     * Gets the total number of suspension events recorded across all buffers.
      */
-    internal fun safeGetSuspensionCount(): Int {
-        return withNativeLibrary(0) { getSuspensionCount() }
+    internal fun safeGetTotalSuspensions(): Int {
+        return withNativeLibrary(0) { getTotalSuspensions() }
     }
 
     /**

@@ -81,7 +81,7 @@ Java_NativeBufferMonitor_getObjectSize(JNIEnv* env, jclass clazz, jobject obj) {
 }
 
 JNIEXPORT jint JNICALL
-Java_NativeBufferMonitor_getSuspensionCount(JNIEnv* env, jclass clazz) {
+Java_NativeBufferMonitor_getTotalSuspensions(JNIEnv* env, jclass clazz) {
     return getSuspensionCount();
 }
 

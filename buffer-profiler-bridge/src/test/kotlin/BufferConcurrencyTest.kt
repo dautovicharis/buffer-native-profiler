@@ -143,7 +143,7 @@ class BufferConcurrencyTest {
         }
 
         val expected = coroutineCount * suspensionsPerCoroutine
-        val totalSuspensions = monitor.safeGetSuspensionCount()
+        val totalSuspensions = monitor.safeGetTotalSuspensions()
         val bufferSuspensions = monitor.safeGetBufferSuspensionCount(bufferId)
 
         assertTrue(totalSuspensions >= expected, "Expected at least $expected total suspensions, got $totalSuspensions")
